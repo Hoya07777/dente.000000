@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Admin - Contratos</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #111, #220000);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        min-height: 100vh;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: #ff4d4d;
+        text-shadow: 0 0 10px #ff1a1a;
+    }
+
+    .container {
+        background: linear-gradient(145deg, #1a0000, #330000);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(255,0,0,0.6);
+        width: 100%;
+        max-width: 400px;
+        animation: fadeIn 1s ease;
+    }
+
+    input, button {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    input {
+        background: #330000;
+        color: #ffcccc;
+    }
+
+    input::placeholder {
+        color: #ff9999;
+    }
+
+    button {
+        background: #ff1a1a;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #e60000;
+        box-shadow: 0 0 15px #ff4d4d;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(-20px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+</style>
+</head>
+<body>
+
+<h2>Painel Administrativo - Contratos</h2>
+
+<div class="container">
+    <input type="text" id="contrato" placeholder="Número do contrato"><br>
+    <input type="text" id="jogo" placeholder="Nome do jogo"><br>
+    <input type="file" id="pdfFile" accept="application/pdf"><br>
+    <button onclick="salvarContrato()">Salvar Contrato</button>
+</div>
+
+<script>
+function salvarContrato(){
+    const contrato = document.getElementById('contrato').value.trim();
+    const jogo = document.getElementById('jogo').value.trim();
+    const file = document.getElementById('pdfFile').files[0];
+
+    if(!contrato || !jogo || !file){
+        alert("Preencha todos os campos e selecione o PDF!");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        const base64PDF = e.target.result;
+
+        db.collection("contratos").doc(contrato).set({
+            contrato: contrato,
+            jogo: jogo.toLowerCase(),
+            pdfBase64: base64PDF
+        }).then(() => {
+            alert("Contrato salvo com sucesso!");
+            document.getElementById('contrato').value = "";
+            document.getElementById('jogo').value = "";
+            document.getElementById('pdfFile').value = "";
+        }).catch((error) => {
+            alert("Erro ao salvar: " + error);
+        });
+    };
+    reader.readAsDataURL(file);
+}
+</script>
+
+</body>
+</html>
