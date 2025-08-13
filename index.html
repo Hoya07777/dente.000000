@@ -3,77 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin - Contratos</title>
+
+<!-- Firebase compat -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
+
+<!-- Firebase Config -->
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCrTDLgZ3kfT7nEG6qTr7N-UO0IKawaJGM",
+  authDomain: "milkilgg.firebaseapp.com",
+  projectId: "milkilgg",
+  storageBucket: "milkilgg.firebasestorage.app",
+  messagingSenderId: "679416194056",
+  appId: "1:679416194056:web:fb7766ce4e3d4f79831dbd"
+};
+
+// Inicializa Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Atalho para Firestore
+const db = firebase.firestore();
+</script>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #111, #220000);
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        min-height: 100vh;
-    }
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #111, #220000);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+}
 
-    h2 {
-        margin-bottom: 20px;
-        text-align: center;
-        font-size: 28px;
-        font-weight: bold;
-        color: #ff4d4d;
-        text-shadow: 0 0 10px #ff1a1a;
-    }
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ff4d4d;
+    text-shadow: 0 0 10px #ff1a1a;
+}
 
-    .container {
-        background: linear-gradient(145deg, #1a0000, #330000);
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 0 25px rgba(255,0,0,0.6);
-        width: 100%;
-        max-width: 400px;
-        animation: fadeIn 1s ease;
-    }
+.container {
+    background: linear-gradient(145deg, #1a0000, #330000);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(255,0,0,0.6);
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 1s ease;
+}
 
-    input, button {
-        width: 100%;
-        padding: 12px;
-        margin: 10px 0;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        outline: none;
-    }
+input, button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
 
-    input {
-        background: #330000;
-        color: #ffcccc;
-    }
+input {
+    background: #330000;
+    color: #ffcccc;
+}
 
-    input::placeholder {
-        color: #ff9999;
-    }
+input::placeholder {
+    color: #ff9999;
+}
 
-    button {
-        background: #ff1a1a;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+button {
+    background: #ff1a1a;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-    button:hover {
-        background: #e60000;
-        box-shadow: 0 0 15px #ff4d4d;
-    }
+button:hover {
+    background: #e60000;
+    box-shadow: 0 0 15px #ff4d4d;
+}
 
-    @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(-20px);}
-        to {opacity: 1; transform: translateY(0);}
-    }
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
 </style>
 </head>
 <body>
@@ -81,9 +100,9 @@
 <h2>Painel Administrativo - Contratos</h2>
 
 <div class="container">
-    <input type="text" id="contrato" placeholder="Número do contrato"><br>
-    <input type="text" id="jogo" placeholder="Nome do jogo"><br>
-    <input type="file" id="pdfFile" accept="application/pdf"><br>
+    <input type="text" id="contrato" placeholder="Número do contrato">
+    <input type="text" id="jogo" placeholder="Nome do jogo">
+    <input type="file" id="pdfFile" accept="application/pdf">
     <button onclick="salvarContrato()">Salvar Contrato</button>
 </div>
 
