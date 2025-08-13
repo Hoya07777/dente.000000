@@ -8,7 +8,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-<!-- Firebase Config -->
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyCrTDLgZ3kfT7nEG6qTr7N-UO0IKawaJGM",
@@ -18,11 +17,7 @@ const firebaseConfig = {
   messagingSenderId: "679416194056",
   appId: "1:679416194056:web:fb7766ce4e3d4f79831dbd"
 };
-
-// Inicializa Firebase
 firebase.initializeApp(firebaseConfig);
-
-// Atalho para Firestore
 const db = firebase.firestore();
 </script>
 
@@ -37,16 +32,7 @@ body {
     padding: 20px;
     min-height: 100vh;
 }
-
-h2 {
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    color: #ff4d4d;
-    text-shadow: 0 0 10px #ff1a1a;
-}
-
+h2 { text-align: center; color: #ff4d4d; text-shadow: 0 0 10px #ff1a1a; }
 .container {
     background: linear-gradient(145deg, #1a0000, #330000);
     padding: 25px;
@@ -54,10 +40,10 @@ h2 {
     box-shadow: 0 0 25px rgba(255,0,0,0.6);
     width: 100%;
     max-width: 400px;
+    margin: 20px auto;
     animation: fadeIn 1s ease;
 }
-
-input, button {
+input, select, button {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
@@ -66,33 +52,14 @@ input, button {
     font-size: 16px;
     outline: none;
 }
-
-input {
-    background: #330000;
-    color: #ffcccc;
-}
-
-input::placeholder {
-    color: #ff9999;
-}
-
+input { background: #330000; color: #ffcccc; }
+input::placeholder { color: #ff9999; }
+select { background: #330000; color: #ffcccc; }
 button {
-    background: #ff1a1a;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+    background: #ff1a1a; color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
 }
-
-button:hover {
-    background: #e60000;
-    box-shadow: 0 0 15px #ff4d4d;
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(-20px);}
-    to {opacity: 1; transform: translateY(0);}
-}
+button:hover { background: #e60000; box-shadow: 0 0 15px #ff4d4d; }
+@keyframes fadeIn { from {opacity:0; transform: translateY(-20px);} to {opacity:1; transform: translateY(0);} }
 </style>
 </head>
 <body>
@@ -102,6 +69,13 @@ button:hover {
 <div class="container">
     <input type="text" id="contrato" placeholder="Número do contrato">
     <input type="text" id="jogo" placeholder="Nome do jogo">
+    <select id="status">
+        <option value="">Selecione o status</option>
+        <option value="membro">Membro promovido</option>
+        <option value="rescindido">Rescindido</option>
+        <option value="quebra">Quebra de contrato</option>
+        <option value="ativo">Ativo</option>
+    </select>
     <input type="file" id="pdfFile" accept="application/pdf">
     <button onclick="salvarContrato()">Salvar Contrato</button>
 </div>
@@ -110,10 +84,11 @@ button:hover {
 function salvarContrato(){
     const contrato = document.getElementById('contrato').value.trim();
     const jogo = document.getElementById('jogo').value.trim();
+    const status = document.getElementById('status').value;
     const file = document.getElementById('pdfFile').files[0];
 
-    if(!contrato || !jogo || !file){
-        alert("Preencha todos os campos e selecione o PDF!");
+    if(!contrato || !jogo || !status || !file){
+        alert("Preencha todos os campos, selecione o PDF e escolha um status!");
         return;
     }
 
@@ -122,13 +97,15 @@ function salvarContrato(){
         const base64PDF = e.target.result;
 
         db.collection("contratos").doc(contrato).set({
-            contrato: contrato,
+            contrato,
             jogo: jogo.toLowerCase(),
+            status,
             pdfBase64: base64PDF
         }).then(() => {
             alert("Contrato salvo com sucesso!");
             document.getElementById('contrato').value = "";
             document.getElementById('jogo').value = "";
+            document.getElementById('status').value = "";
             document.getElementById('pdfFile').value = "";
         }).catch((error) => {
             alert("Erro ao salvar: " + error);
